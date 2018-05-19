@@ -11,7 +11,7 @@ defmodule PhpAssocMap do
     Regex.replace(@flatten_regex, assoc_string, "")
   end
 
-  def to_map(assoc_array), do: to_map(assoc_array, %{})
+  def to_map(assoc_array), do: to_map(flatten_assoc(assoc_array), %{})
 
   def to_map(assoc_array, root) do
     parse_line(root, split_lines(assoc_array))

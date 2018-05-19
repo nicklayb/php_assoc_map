@@ -19,6 +19,38 @@ defmodule PhpAssocMapTest do
     assert @flatten_source == PhpAssocMap.flatten_assoc(source)
   end
 
+  test "parse unflatten array" do
+    source = """
+    [
+      'lvl_1_1' => [
+        'lvl_2_1' => 1,
+        'lvl_2_2' => 'Single quoted string',
+        'lvl_2_3' => "Double quoted string"
+      ],
+      'lvl_1_2' => false,
+      'lvl_1_3' => [
+        'lvl_2_1' => true,
+        'lvl_2_2' => 54.12
+      ]
+    ]
+    """
+
+    expected = %{
+      "lvl_1_1": %{
+        "lvl_2_1": 1,
+        "lvl_2_2": "Single quoted string",
+        "lvl_2_3": "Double quoted string"
+      },
+      "lvl_1_2": false,
+      "lvl_1_3": %{
+        "lvl_2_1": true,
+        "lvl_2_2": 54.12
+      },
+    }
+
+    assert PhpAssocMap.to_map(source) == expected
+  end
+
   test "flatten a flatten associative array" do
     assert @flatten_source == PhpAssocMap.flatten_assoc(@flatten_source)
   end

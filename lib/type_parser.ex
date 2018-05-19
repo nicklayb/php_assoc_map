@@ -31,7 +31,9 @@ defmodule PhpAssocMap.TypeParser do
       :integer ->
         {int_val, _} = Integer.parse(value)
         int_val
-      :float -> Float.parse(value)
+      :float ->
+        {float_val, _} = Float.parse(value)
+        float_val
       :bool_false -> false
       :bool_true -> true
         _ -> value
