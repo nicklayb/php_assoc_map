@@ -45,7 +45,6 @@ defmodule PhpAssocMap.TypeParser do
   def parse_key(key) do
     key
     |> sanitize
-    |> String.to_atom
   end
 
   def sanitize(value) do
