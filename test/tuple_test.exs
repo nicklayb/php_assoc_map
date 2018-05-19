@@ -21,16 +21,16 @@ defmodule TupleTest do
     """
 
     expected = [
-      {"lvl_1_1", [
-          {"lvl_2_1", 1},
-          {"lvl_2_2", "Single quoted string"},
-          {"lvl_2_3", "Double quoted string"},
+      {:lvl_1_1, [
+          {:lvl_2_1, 1},
+          {:lvl_2_2, "Single quoted string"},
+          {:lvl_2_3, "Double quoted string"},
         ]
       },
-      {"lvl_1_2", false},
-      {"lvl_1_3", [
-          {"lvl_2_1", true},
-          {"lvl_2_2", 54.12},
+      {:lvl_1_2, false},
+      {:lvl_1_3, [
+          {:lvl_2_1, true},
+          {:lvl_2_2, 54.12},
         ]
       },
     ]
@@ -59,14 +59,15 @@ defmodule TupleTest do
   end
 
   test "parses associative array to map" do
-    expected = %{
-      "lvl_1_1": %{
-        "lvl_2_1": 1,
-        "lvl_2_2": "Single quoted string",
-        "lvl_2_3": "Double quoted string"
+    expected = [
+      {:lvl_1_1, [
+          {:lvl_2_1, 1},
+          {:lvl_2_2, "Single quoted string"},
+          {:lvl_2_3, "Double quoted string"},
+        ]
       },
-      "lvl_1_2": false
-    }
+      {:lvl_1_2, false}
+    ]
 
     assert PhpAssocMap.to_tuple(@flatten_source) == expected
   end
