@@ -39,11 +39,6 @@ defmodule PhpAssocMapTest do
     assert PhpAssocMap.split_key_value(value) == expected
   end
 
-  test "extract bracket content" do
-    expected = String.slice(@flatten_source, 1, String.length(@flatten_source) - 2)
-    assert PhpAssocMap.unwrap(@flatten_source) == expected
-  end
-
   test "parses associative array to map" do
     expected = %{
       "lvl_1_1": %{

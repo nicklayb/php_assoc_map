@@ -8,7 +8,7 @@ defmodule PhpAssocMap.TypeParser do
   @bool_true "true"
   @bool_false "false"
 
-  def parse(original_value) do
+  def get_type(original_value) do
     value = String.trim original_value
     cond do
       surrounded_by?(value, "\"") -> :string
@@ -23,6 +23,36 @@ defmodule PhpAssocMap.TypeParser do
       value == @bool_false -> :bool_false
       true -> raise "Unexpected starting token at start of #{value}"
     end
+  end
+
+  def parse(value) do
+    case get_type(value) do
+      :string -> unwrap(value)
+      :integer ->
+        {int_val, _} = Integer.parse(value)
+        int_val
+      :float -> Float.parse(value)
+      :bool_false -> false
+      :bool_true -> true
+        _ -> value
+    end
+  end
+
+  def parse_key(key) do
+    key
+    |> sanitize
+    |> String.to_atom
+  end
+
+  def sanitize(value) do
+    case get_type(value) do
+      :string -> unwrap(value)
+      _ -> value
+    end
+  end
+
+  def unwrap(string) do
+    String.slice(string, 1, String.length(string) - 2)
   end
 
   defp integer?(value), do: Regex.match?(@integer_regex, value)

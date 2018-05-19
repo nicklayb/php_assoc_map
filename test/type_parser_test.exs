@@ -4,42 +4,48 @@ defmodule TypeParserTest do
   alias PhpAssocMap.TypeParser
 
   test "parses opening array" do
-    assert TypeParser.parse("[...") == :open_array
+    assert TypeParser.get_type("[...") == :open_array
   end
 
   test "parses closing array" do
-    assert TypeParser.parse("]...") == :close_array
+    assert TypeParser.get_type("]...") == :close_array
   end
 
   test "parses a float value" do
-    assert TypeParser.parse("43.23") == :float
+    assert TypeParser.get_type("43.23") == :float
   end
 
   test "parses an integer value" do
-    assert TypeParser.parse("433") == :integer
+    assert TypeParser.get_type("433") == :integer
   end
 
   test "parses a single quoted string" do
-    assert TypeParser.parse("'A value'") == :string
+    assert TypeParser.get_type("'A value'") == :string
   end
 
   test "parses a double quoted string" do
-    assert TypeParser.parse("\"A value\"") == :string
+    assert TypeParser.get_type("\"A value\"") == :string
   end
 
   test "parses an association arrow" do
-    assert TypeParser.parse("=>") == :arrow
+    assert TypeParser.get_type("=>") == :arrow
   end
 
   test "parses a comma" do
-    assert TypeParser.parse(",") == :comma
+    assert TypeParser.get_type(",") == :comma
   end
 
   test "parses a boolean true" do
-    assert TypeParser.parse("true") == :bool_true
+    assert TypeParser.get_type("true") == :bool_true
   end
 
   test "parses a boolean false" do
-    assert TypeParser.parse("false") == :bool_false
+    assert TypeParser.get_type("false") == :bool_false
+  end
+
+  test "extract bracket content" do
+    original = "[Unwrapped]"
+    expected = "Unwrapped"
+    assert TypeParser.unwrap(original) == expected
   end
 end

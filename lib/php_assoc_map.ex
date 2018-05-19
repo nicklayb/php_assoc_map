@@ -25,33 +25,13 @@ defmodule PhpAssocMap do
   def parse_line(root, lines, index) do
     item = Enum.at(lines, index)
     {left, right} = split_key_value(item)
-    parse_line(Map.put(root, parse_key(left), parse(right)), lines, index + 1)
-  end
-
-  def parse_key(key) do
-    key
-    |> sanitize
-    |> String.to_atom
+    parse_line(Map.put(root, TypeParser.parse_key(left), parse(right)), lines, index + 1)
   end
 
   def parse(value) do
-    case TypeParser.parse(value) do
+    case TypeParser.get_type(value) do
       :open_array -> to_map(value)
-      :string -> unwrap(value)
-      :integer ->
-        {int_val, _} = Integer.parse(value)
-        int_val
-      :float -> Float.parse(value)
-      :bool_false -> false
-      :bool_true -> true
-        _ -> value
-    end
-  end
-
-  def sanitize(value) do
-    case TypeParser.parse(value) do
-      :string -> unwrap(value)
-      _ -> value
+        _ -> TypeParser.parse(value)
     end
   end
 
@@ -61,10 +41,6 @@ defmodule PhpAssocMap do
   end
 
   def split_lines(assoc_array) do
-    Regex.split(@record_splitter, unwrap(assoc_array))
-  end
-
-  def unwrap(string) do
-    String.slice(string, 1, String.length(string) - 2)
+    Regex.split(@record_splitter, TypeParser.unwrap(assoc_array))
   end
 end
