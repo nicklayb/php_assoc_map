@@ -2,9 +2,12 @@
 
 Library that parses PHP's associative array into Elixir's map.
 
-### Current state
+At his current state, 
 
-At his current state, the library can parse to a 1 level deep array like :
+## Limitations
+
+### One level deep
+the library can parse to a 1 level deep array like :
 ```
 [
   'lvl_1_1' => [
@@ -32,7 +35,7 @@ Parsing 2+ level deep is in the todo
 
 - [ ] Parse 2+ level deep
 
-### Limitations
+### Keyed array
 
 Currently, the library on supports named keys, which means that straight are not parsed a the moment. This is in the todo list
 
