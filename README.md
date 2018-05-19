@@ -1,5 +1,7 @@
 # PhpAssocMap
 
+[![Build Status](https://travis-ci.org/nicklayb/php_assoc_map.svg?branch=master)](https://travis-ci.org/nicklayb/php_assoc_map)
+
 Library that parses PHP's associative array into Elixir's map.
 
 At his current state,
