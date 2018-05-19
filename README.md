@@ -79,6 +79,19 @@ PhpAssocMap.to_tuple source
 
 ```
 
+### Utilities
+
+#### Clean up
+
+The library includes `PhpAssocMap.Utils.clean_up/1` which cleans up php bloat from the associative array. It remove the
+```php
+<?php
+
+return
+```
+
+before the array return along with the endig semi-colon
+
 ## Limitations
 
 ### One level deep

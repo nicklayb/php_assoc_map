@@ -46,4 +46,30 @@ defmodule UtilsTest do
     assert PhpAssocMap.Utils.split_key_value(value) == expected
   end
 
+  test "clean up php file" do
+    source = """
+    <?php
+
+    return [
+      'lvl_1_1' => [
+        'lvl_2_1' => 1,
+        'lvl_2_2' => 'Single quoted string',
+        'lvl_2_3' => "Double quoted string"
+      ],
+      'lvl_1_2' => false
+    ]
+    """
+    expected = """
+    [
+      'lvl_1_1' => [
+        'lvl_2_1' => 1,
+        'lvl_2_2' => 'Single quoted string',
+        'lvl_2_3' => "Double quoted string"
+      ],
+      'lvl_1_2' => false
+    ]
+    """
+
+    assert PhpAssocMap.Utils.clean_up(source) == expected
+  end
 end
