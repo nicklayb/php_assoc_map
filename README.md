@@ -30,11 +30,11 @@ Which parses to :
 
 Parsing 2+ level deep is in the todo
 
-[ ] Parse 2+ level deep
+- [ ] Parse 2+ level deep
 
 ### Limitations
 
 Currently, the library on supports named keys, which means that straight are not parsed a the moment. This is in the todo list
 
-[ ] Parse indexed array also
+- [ ] Parse indexed array also
 
