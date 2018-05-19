@@ -8,6 +8,8 @@ defmodule PhpAssocMap.TypeParser do
   @bool_true "true"
   @bool_false "false"
 
+  alias PhpAssocMap.Utils
+
   def get_type(original_value) do
     value = String.trim original_value
     cond do
@@ -27,7 +29,7 @@ defmodule PhpAssocMap.TypeParser do
 
   def parse(value) do
     case get_type(value) do
-      :string -> unwrap(value)
+      :string -> Utils.unwrap(value)
       :integer ->
         {int_val, _} = Integer.parse(value)
         int_val
@@ -48,13 +50,9 @@ defmodule PhpAssocMap.TypeParser do
 
   def sanitize(value) do
     case get_type(value) do
-      :string -> unwrap(value)
+      :string -> Utils.unwrap(value)
       _ -> value
     end
-  end
-
-  def unwrap(string) do
-    String.slice(string, 1, String.length(string) - 2)
   end
 
   defp integer?(value), do: Regex.match?(@integer_regex, value)

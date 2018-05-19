@@ -2,7 +2,21 @@
 
 Library that parses PHP's associative array into Elixir's map.
 
-At his current state, 
+At his current state,
+
+## Installation
+
+Add the following to your `mix.exs` file:
+```elixir
+defp deps do
+  [
+    # ...
+    {:php_assoc_map, "~> 0.1"}
+  ]
+end
+```
+
+Don't forget to run `mix deps.get` to update dependencies
 
 ## Limitations
 

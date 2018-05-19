@@ -42,10 +42,4 @@ defmodule TypeParserTest do
   test "parses a boolean false" do
     assert TypeParser.get_type("false") == :bool_false
   end
-
-  test "extract bracket content" do
-    original = "[Unwrapped]"
-    expected = "Unwrapped"
-    assert TypeParser.unwrap(original) == expected
-  end
 end
