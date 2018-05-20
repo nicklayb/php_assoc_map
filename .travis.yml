@@ -8,6 +8,9 @@ cache:
   - _build
   - deps
 
+env:
+  - MIX_ENV=test
+
 script:
-  - mix test
   - mix credo --strict
+  - mix coveralls.travis

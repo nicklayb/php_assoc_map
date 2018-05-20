@@ -42,4 +42,28 @@ defmodule TypeParserTest do
   test "parses a boolean false" do
     assert TypeParser.get_type("false") == :bool_false
   end
+
+  test "parses a nil as nil" do
+    assert TypeParser.parse("nil") == nil
+  end
+
+  test "sanitize a non string" do
+    assert TypeParser.sanitize("false") == "false"
+  end
+
+  test "parses a nil type for nil value" do
+    assert TypeParser.get_type("nil") == :nil
+  end
+
+  test "raises when a non string is given" do
+    assert_raise RuntimeError, fn ->
+      TypeParser.get_type(nil)
+    end
+  end
+
+  test "raises an unknown string type is parsed" do
+    assert_raise RuntimeError, fn ->
+      TypeParser.get_type("k")
+    end
+  end
 end
