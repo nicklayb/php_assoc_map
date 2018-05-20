@@ -13,7 +13,7 @@ Add the following to your `mix.exs` file:
 defp deps do
   [
     # ...
-    {:php_assoc_map, "~> 0.2"}
+    {:php_assoc_map, "~> 0.4"}
   ]
 end
 ```

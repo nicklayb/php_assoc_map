@@ -86,7 +86,6 @@ defmodule PhpAssocMap.Utils do
   end
 
   def bracket_count_matches?(line), do: count(line, @opening_regex) == count(line, @closing_regex)
-  def bracket_difference(line), do: count(line, @opening_regex) - count(line, @closing_regex)
 
   defp count(line, regex), do: matches_length(Regex.scan(regex, line))
 

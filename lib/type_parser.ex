@@ -10,12 +10,13 @@ defmodule PhpAssocMap.TypeParser do
 
   alias PhpAssocMap.Utils
 
-  def get_type(original_value) do
+  def get_type(original_value) when is_binary(original_value) do
     value = String.trim original_value
     cond do
       string?(value) -> :string
       integer?(value) -> :integer
       float?(value) -> :float
+      nil?(value) -> :nil
       String.starts_with?(value, @opening_array) -> :open_array
       String.starts_with?(value, @closing_array) -> :close_array
       String.starts_with?(value, @value_seperator) -> :comma
@@ -25,6 +26,8 @@ defmodule PhpAssocMap.TypeParser do
       true -> raise "Unexpected starting token at start of #{value}"
     end
   end
+
+  def get_type(_), do: raise "Expected string"
 
   def parse(value) do
     case get_type(value) do
@@ -37,7 +40,7 @@ defmodule PhpAssocMap.TypeParser do
         float_val
       :bool_false -> false
       :bool_true -> true
-        _ -> value
+      :nil -> nil
     end
   end
 
@@ -52,6 +55,8 @@ defmodule PhpAssocMap.TypeParser do
       _ -> value
     end
   end
+
+  defp nil?(value), do: String.downcase(value) == "null" || String.downcase(value) == "nil"
 
   defp string?(value), do: surrounded_by?(value, "\"") || surrounded_by?(value, "'")
 
