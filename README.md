@@ -1,7 +1,7 @@
 # PhpAssocMap
 
 [![Build Status](https://travis-ci.org/nicklayb/php_assoc_map.svg?branch=master)](https://travis-ci.org/nicklayb/php_assoc_map)
-[![Coverage Status](https://coveralls.io/repos/github/nicklayb/php_assoc_map/badge.svg?branch=master)](https://coveralls.io/github/nicklayb/php_assoc_map?branch=0.4.0)
+[![Coverage Status](https://coveralls.io/repos/github/nicklayb/php_assoc_map/badge.svg?branch=master)](https://coveralls.io/github/nicklayb/php_assoc_map?branch=master)
 
 Library that parses PHP's associative array into Elixir's map.
 
