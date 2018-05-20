@@ -14,7 +14,8 @@ defmodule PhpAssocMap.Map do
   def parse_line(root, lines, index) do
     item = Enum.at(lines, index)
     {left, right} = Utils.split_key_value(item)
-    parse_line(Map.put(root, TypeParser.parse_key(left), parse(right)), lines, index + 1)
+    key = TypeParser.parse_key(left)
+    parse_line(Map.put(root, key, parse(right)), lines, index + 1)
   end
 
   def parse(value) do

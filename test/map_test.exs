@@ -2,6 +2,8 @@ defmodule MapTest do
   use ExUnit.Case
   doctest PhpAssocMap
 
+  alias PhpAssocMap.{Utils}
+
   @flatten_source "['lvl_1_1'=>['lvl_2_1'=>1,'lvl_2_2'=>'Single quoted string','lvl_2_3'=>\"Double quoted string\"],'lvl_1_2'=>false]"
 
   test "parse unflatten array" do
@@ -37,7 +39,7 @@ defmodule MapTest do
   end
 
   test "flatten a flatten associative array" do
-    assert @flatten_source == PhpAssocMap.Utils.flatten_assoc(@flatten_source)
+    assert @flatten_source == Utils.flatten_assoc(@flatten_source)
   end
 
   test "splits by comma" do
@@ -46,14 +48,14 @@ defmodule MapTest do
       "'lvl_1_2'=>false"
     ]
 
-    assert PhpAssocMap.Utils.split_lines(@flatten_source) == expected
+    assert Utils.split_lines(@flatten_source) == expected
   end
 
   test "splits entry by first key value" do
     value = "'lvl_1_2'=>['nested'=>'things']"
     expected = {"'lvl_1_2'", "['nested'=>'things']"}
 
-    assert PhpAssocMap.Utils.split_key_value(value) == expected
+    assert Utils.split_key_value(value) == expected
   end
 
   test "parses associative array to map" do
