@@ -17,7 +17,7 @@ defmodule UtilsTest do
     ]
     """
 
-    assert @flatten_source == PhpAssocMap.Utils.flatten_assoc(source)
+    assert @flatten_source == Utils.flatten_assoc(source)
   end
 
   test "extract bracket content" do
@@ -27,7 +27,7 @@ defmodule UtilsTest do
   end
 
   test "flatten a flatten associative array" do
-    assert @flatten_source == PhpAssocMap.Utils.flatten_assoc(@flatten_source)
+    assert @flatten_source == Utils.flatten_assoc(@flatten_source)
   end
 
   test "splits by comma" do
@@ -36,14 +36,14 @@ defmodule UtilsTest do
       "'lvl_1_2'=>false"
     ]
 
-    assert PhpAssocMap.Utils.split_lines(@flatten_source) == expected
+    assert Utils.split_lines(@flatten_source) == expected
   end
 
   test "splits entry by first key value" do
     value = "'lvl_1_2'=>['nested'=>'things']"
     expected = {"'lvl_1_2'", "['nested'=>'things']"}
 
-    assert PhpAssocMap.Utils.split_key_value(value) == expected
+    assert Utils.split_key_value(value) == expected
   end
 
   test "clean up php file" do
@@ -70,6 +70,6 @@ defmodule UtilsTest do
     ]
     """
 
-    assert PhpAssocMap.Utils.clean_up(source) == expected
+    assert Utils.clean_up(source) == expected
   end
 end

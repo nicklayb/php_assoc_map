@@ -13,8 +13,7 @@ defmodule PhpAssocMap.TypeParser do
   def get_type(original_value) do
     value = String.trim original_value
     cond do
-      surrounded_by?(value, "\"") -> :string
-      surrounded_by?(value, "'") -> :string
+      string?(value) -> :string
       integer?(value) -> :integer
       float?(value) -> :float
       String.starts_with?(value, @opening_array) -> :open_array
@@ -53,6 +52,8 @@ defmodule PhpAssocMap.TypeParser do
       _ -> value
     end
   end
+
+  defp string?(value), do: surrounded_by?(value, "\"") || surrounded_by?(value, "'")
 
   defp integer?(value), do: Regex.match?(@integer_regex, value)
 
