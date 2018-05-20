@@ -1,4 +1,4 @@
-defmodule PhpAssocMap.Tuple do
+defmodule PhpAssocMap.Tuple.Parser do
   alias PhpAssocMap.{Utils, TypeParser}
 
   def to_tuple(assoc_array), do: to_tuple(Utils.flatten_assoc(assoc_array), [])

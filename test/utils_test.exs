@@ -3,21 +3,8 @@ defmodule UtilsTest do
 
   alias PhpAssocMap.Utils
 
-  @flatten_source "['lvl_1_1'=>['lvl_2_1'=>1,'lvl_2_2'=>'Single quoted string','lvl_2_3'=>\"Double quoted string\"],'lvl_1_2'=>false]"
-
   test "flatten associative array" do
-    source = """
-    [
-      'lvl_1_1' => [
-        'lvl_2_1' => 1,
-        'lvl_2_2' => 'Single quoted string',
-        'lvl_2_3' => "Double quoted string"
-      ],
-      'lvl_1_2' => false
-    ]
-    """
-
-    assert @flatten_source == Utils.flatten_assoc(source)
+    assert Mock.flatten_source == Utils.flatten_assoc(Mock.spaced_source)
   end
 
   test "extract bracket content" do
@@ -27,16 +14,11 @@ defmodule UtilsTest do
   end
 
   test "flatten a flatten associative array" do
-    assert @flatten_source == Utils.flatten_assoc(@flatten_source)
+    assert Mock.flatten_source == Utils.flatten_assoc(Mock.flatten_source)
   end
 
   test "splits by comma" do
-    expected = [
-      "'lvl_1_1'=>['lvl_2_1'=>1,'lvl_2_2'=>'Single quoted string','lvl_2_3'=>\"Double quoted string\"]",
-      "'lvl_1_2'=>false"
-    ]
-
-    assert Utils.split_lines(@flatten_source) == expected
+    assert Utils.split_lines(Mock.flatten_source) == Mock.splitted_source
   end
 
   test "splits entry by first key value" do
@@ -47,29 +29,22 @@ defmodule UtilsTest do
   end
 
   test "clean up php file" do
-    source = """
-    <?php
+    source = "<?php\n\nreturn #{Mock.spaced_source}"
 
-    return [
-      'lvl_1_1' => [
-        'lvl_2_1' => 1,
-        'lvl_2_2' => 'Single quoted string',
-        'lvl_2_3' => "Double quoted string"
-      ],
-      'lvl_1_2' => false
-    ]
-    """
-    expected = """
-    [
-      'lvl_1_1' => [
-        'lvl_2_1' => 1,
-        'lvl_2_2' => 'Single quoted string',
-        'lvl_2_3' => "Double quoted string"
-      ],
-      'lvl_1_2' => false
-    ]
-    """
+    assert Utils.clean_up(source) == Mock.spaced_source
+  end
 
-    assert Utils.clean_up(source) == expected
+  test "get indexes of a char" do
+    source = "[aa[bb[cc]dd]ee[ff]]"
+    expected = [0, 3, 6, 15]
+
+    assert Utils.indexes_of(source, "[") == expected
+  end
+
+  test "inserts at" do
+    source = "The following  is missing"
+    expected = "The following part is missing"
+
+    assert Utils.insert_at(source, 14, "part") == expected
   end
 end

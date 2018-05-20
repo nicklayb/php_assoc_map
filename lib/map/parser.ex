@@ -1,4 +1,4 @@
-defmodule PhpAssocMap.Map do
+defmodule PhpAssocMap.Map.Parser do
   alias PhpAssocMap.{TypeParser, Utils}
 
   def to_map(assoc_array), do: to_map(Utils.flatten_assoc(assoc_array), %{})
