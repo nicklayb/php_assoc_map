@@ -6,6 +6,8 @@ defmodule PhpAssocMap.Utils do
   @break_line "\n"
   @closing_regex ~r{\]}
   @opening_regex ~r{\[}
+  @comment_regex ~r{\/\*[\s\S]*?\*\/|([^:]|^)\/\/.*$}
+  @single_quote_regex ~r{['](.*?)[']}
 
   alias PhpAssocMap.AssocSlicer
 
@@ -21,9 +23,9 @@ defmodule PhpAssocMap.Utils do
   def flatten_assoc(assoc_string) do
     assoc_string
     |> String.replace(@flatten_regex, "")
-    |> String.replace("\\'", "$!$")
+    |> String.replace("\\'", "'")
     |> String.replace("'", "\"")
-    |> String.replace(~r{['](.*?)[']}, "\"\\1\"")
+    |> String.replace(@single_quote_regex, "\"\\1\"")
   end
 
   def explode(assoc), do: explode(assoc, {:spaces, 2})
@@ -63,6 +65,7 @@ defmodule PhpAssocMap.Utils do
 
   def break_down(assoc) do
     assoc
+    |> String.replace(@comment_regex, "")
     |> String.replace(~r{(\[)}, "\\1\n")
     |> String.replace(~r{(\])}, "\n\\1")
     |> String.replace(~r{(,)}, "\\1\n")
