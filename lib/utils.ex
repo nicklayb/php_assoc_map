@@ -8,6 +8,8 @@ defmodule PhpAssocMap.Utils do
   @opening_regex ~r{\[}
   @comment_regex ~r{\/\*[\s\S]*?\*\/|([^:]|^)\/\/.*$}
   @single_quote_regex ~r{['](.*?)[']}
+  @start_named_array_regex ~r{(array\()(?=(?:[^"]|"[^"]*")*$)}
+  @end_named_array_regex ~r{(\))(?=(?:[^"]|"[^"]*")*$)}
 
   alias PhpAssocMap.AssocSlicer
 
@@ -22,6 +24,8 @@ defmodule PhpAssocMap.Utils do
 
   def flatten_assoc(assoc_string) do
     assoc_string
+    |> remove_comments()
+    |> convert_arrays()
     |> String.replace(@flatten_regex, "")
     |> String.replace("\\'", "'")
     |> String.replace("'", "\"")
@@ -63,9 +67,13 @@ defmodule PhpAssocMap.Utils do
     if Regex.match?(~r{(\])}, part), do: level - 1, else: level
   end
 
-  def break_down(assoc) do
+  def remove_comments(assoc) do
     assoc
     |> String.replace(@comment_regex, "")
+  end
+
+  def break_down(assoc) do
+    assoc
     |> String.replace(~r{(\[)}, "\\1\n")
     |> String.replace(~r{(\])}, "\n\\1")
     |> String.replace(~r{(,)}, "\\1\n")
@@ -85,11 +93,15 @@ defmodule PhpAssocMap.Utils do
   def wrap(string, left, right), do: left <> string <> right
 
   def clean_up(raw) do
-    Regex.replace(@clean_after, Regex.replace(@clean_before, raw, "", global: false), "")
+    raw
+    |> String.replace(@clean_before, "", global: false)
+    |> String.replace(@clean_after, "")
   end
 
-  def indexes_of(string, char) do
-    indexes_of(string, char, [], 0)
+  def convert_arrays(assoc) do
+    assoc
+    |> String.replace(@start_named_array_regex, "[")
+    |> String.replace(@end_named_array_regex, "]")
   end
 
   def bracket_count_matches?(line), do: count(line, @opening_regex) == count(line, @closing_regex)
@@ -99,20 +111,4 @@ defmodule PhpAssocMap.Utils do
   defp matches_length([]), do: 0
 
   defp matches_length(matches), do: length(matches)
-
-  defp indexes_of(string, char, list, last_index) do
-    substr = String.slice(string, last_index, String.length(string))
-    case :binary.match(substr, char) do
-      {index, _} ->
-        new_index = index + last_index
-        indexes_of(string, char, list ++ [new_index], new_index + 1)
-      _ -> list
-    end
-  end
-
-  def insert_at(string, index, insert) do
-    left = String.slice(string, 0, index)
-    right = String.slice(string, index, String.length(string))
-    "#{left}#{insert}#{right}"
-  end
 end

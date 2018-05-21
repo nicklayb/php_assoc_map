@@ -8,7 +8,7 @@ defmodule PhpAssocMap.AssocSlicer do
   end
 
   def split(assoc) do
-    Regex.split(@slice_regex, assoc)
+    String.split(assoc, @slice_regex)
   end
 
   defp parse(tokens, index, _, output) when index == length(tokens), do: output
