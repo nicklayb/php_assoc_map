@@ -3,6 +3,10 @@ defmodule UtilsTest do
 
   alias PhpAssocMap.Utils
 
+  test "flatten associative array with single quotes" do
+    assert Mock.flatten_source == Utils.flatten_assoc(Mock.flatten_single_quote_source)
+  end
+
   test "flatten associative array" do
     assert Mock.flatten_source == Utils.flatten_assoc(Mock.spaced_source)
   end
@@ -34,17 +38,21 @@ defmodule UtilsTest do
     assert Utils.clean_up(source) == Mock.spaced_source
   end
 
-  test "get indexes of a char" do
-    source = "[aa[bb[cc]dd]ee[ff]]"
-    expected = [0, 3, 6, 15]
-
-    assert Utils.indexes_of(source, "[") == expected
+  test "cleans up a complexe array" do
+    assert Utils.flatten_assoc(Mock.complex_source) == Mock.flatten_source
   end
 
-  test "inserts at" do
-    source = "The following  is missing"
-    expected = "The following part is missing"
+  test "converts named array to brackets" do
+    converted = Utils.convert_arrays(Mock.arrayed_source)
+    assert Utils.flatten_assoc(converted) == Mock.flatten_source
+  end
 
-    assert Utils.insert_at(source, 14, "part") == expected
+  test "removes comment from array" do
+    assert Utils.remove_comments(Mock.commented_source) == Mock.spaced_source
+  end
+
+  test "removes comments and flatten array" do
+    uncommented = Utils.remove_comments(Mock.commented_source)
+    assert Utils.flatten_assoc(uncommented) == Mock.flatten_source
   end
 end

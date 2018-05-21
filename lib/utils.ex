@@ -6,6 +6,10 @@ defmodule PhpAssocMap.Utils do
   @break_line "\n"
   @closing_regex ~r{\]}
   @opening_regex ~r{\[}
+  @comment_regex ~r{\/\*[\s\S]*?\*\/|([^:]|^)\/\/.*$}
+  @single_quote_regex ~r{['](.*?)[']}
+  @start_named_array_regex ~r{(array\()(?=(?:[^"]|"[^"]*")*$)}
+  @end_named_array_regex ~r{(\))(?=(?:[^"]|"[^"]*")*$)}
 
   alias PhpAssocMap.AssocSlicer
 
@@ -19,7 +23,13 @@ defmodule PhpAssocMap.Utils do
   end
 
   def flatten_assoc(assoc_string) do
-    Regex.replace(@flatten_regex, assoc_string, "")
+    assoc_string
+    |> remove_comments()
+    |> convert_arrays()
+    |> String.replace(@flatten_regex, "")
+    |> String.replace("\\'", "'")
+    |> String.replace("'", "\"")
+    |> String.replace(@single_quote_regex, "\"\\1\"")
   end
 
   def explode(assoc), do: explode(assoc, {:spaces, 2})
@@ -27,12 +37,12 @@ defmodule PhpAssocMap.Utils do
   @splitter "\s"
   def explode(assoc, {:spaces, count}) do
     splitter = String.duplicate(@splitter, count)
-    Enum.join(indent_part(break_down(assoc), splitter, 0, 0, []), @break_line) <> "\n"
+    Enum.join(indent_part(break_down(assoc), splitter, 0, 0, []), @break_line)
   end
 
   @splitter "\t"
   def explode(assoc, {:tabs}) do
-    Enum.join(indent_part(break_down(assoc), @splitter, 0, 0, []), @break_line) <> "\n"
+    Enum.join(indent_part(break_down(assoc), @splitter, 0, 0, []), @break_line)
   end
 
   defp indent_part(parts, _, _, _, output) when length(parts) == length(output), do: output
@@ -57,6 +67,11 @@ defmodule PhpAssocMap.Utils do
     if Regex.match?(~r{(\])}, part), do: level - 1, else: level
   end
 
+  def remove_comments(assoc) do
+    assoc
+    |> String.replace(@comment_regex, "")
+  end
+
   def break_down(assoc) do
     assoc
     |> String.replace(~r{(\[)}, "\\1\n")
@@ -78,11 +93,15 @@ defmodule PhpAssocMap.Utils do
   def wrap(string, left, right), do: left <> string <> right
 
   def clean_up(raw) do
-    Regex.replace(@clean_after, Regex.replace(@clean_before, raw, "", global: false), "")
+    raw
+    |> String.replace(@clean_before, "", global: false)
+    |> String.replace(@clean_after, "")
   end
 
-  def indexes_of(string, char) do
-    indexes_of(string, char, [], 0)
+  def convert_arrays(assoc) do
+    assoc
+    |> String.replace(@start_named_array_regex, "[")
+    |> String.replace(@end_named_array_regex, "]")
   end
 
   def bracket_count_matches?(line), do: count(line, @opening_regex) == count(line, @closing_regex)
@@ -92,20 +111,4 @@ defmodule PhpAssocMap.Utils do
   defp matches_length([]), do: 0
 
   defp matches_length(matches), do: length(matches)
-
-  defp indexes_of(string, char, list, last_index) do
-    substr = String.slice(string, last_index, String.length(string))
-    case :binary.match(substr, char) do
-      {index, _} ->
-        new_index = index + last_index
-        indexes_of(string, char, list ++ [new_index], new_index + 1)
-      _ -> list
-    end
-  end
-
-  def insert_at(string, index, insert) do
-    left = String.slice(string, 0, index)
-    right = String.slice(string, index, String.length(string))
-    "#{left}#{insert}#{right}"
-  end
 end

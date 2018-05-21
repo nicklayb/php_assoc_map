@@ -31,7 +31,7 @@ defmodule PhpAssocMap.TypeParser do
 
   def parse(value) do
     case get_type(value) do
-      :string -> Utils.unwrap(value)
+      :string -> clean_string(Utils.unwrap(value))
       :integer ->
         {int_val, _} = Integer.parse(value)
         int_val
@@ -54,6 +54,13 @@ defmodule PhpAssocMap.TypeParser do
       :string -> Utils.unwrap(value)
       _ -> value
     end
+  end
+
+  def clean_string(string) do
+    string
+    |> String.replace("\\\"", "\"")
+    |> String.replace("\"", "\\\"")
+    |> String.replace("\\'", "'")
   end
 
   defp nil?(value), do: String.downcase(value) == "null" || String.downcase(value) == "nil"
