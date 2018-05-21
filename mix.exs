@@ -4,7 +4,7 @@ defmodule PhpAssocMap.MixProject do
   def project do
     [
       app: :php_assoc_map,
-      version: "0.4.0",
+      version: "0.4.1",
       name: "PhpAssocMap",
       description: "Library that parses PHP's associative array into Elixir's map.",
       source_url: "https://github.com/nicklayb/php_assoc_map",
@@ -37,7 +37,8 @@ defmodule PhpAssocMap.MixProject do
     [
       {:ex_doc, "~> 0.16", only: :dev, runtime: false},
       {:credo, "~> 0.9.1", only: [:dev, :test], runtime: false},
-      {:excoveralls, "~> 0.8", only: :test}
+      {:excoveralls, "~> 0.8", only: :test},
+      {:mix_test_watch, "~> 0.6", only: :dev, runtime: false}
     ]
   end
 end

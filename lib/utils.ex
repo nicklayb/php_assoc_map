@@ -19,7 +19,11 @@ defmodule PhpAssocMap.Utils do
   end
 
   def flatten_assoc(assoc_string) do
-    Regex.replace(@flatten_regex, assoc_string, "")
+    assoc_string
+    |> String.replace(@flatten_regex, "")
+    |> String.replace("\\'", "$!$")
+    |> String.replace("'", "\"")
+    |> String.replace(~r{['](.*?)[']}, "\"\\1\"")
   end
 
   def explode(assoc), do: explode(assoc, {:spaces, 2})
@@ -27,12 +31,12 @@ defmodule PhpAssocMap.Utils do
   @splitter "\s"
   def explode(assoc, {:spaces, count}) do
     splitter = String.duplicate(@splitter, count)
-    Enum.join(indent_part(break_down(assoc), splitter, 0, 0, []), @break_line) <> "\n"
+    Enum.join(indent_part(break_down(assoc), splitter, 0, 0, []), @break_line)
   end
 
   @splitter "\t"
   def explode(assoc, {:tabs}) do
-    Enum.join(indent_part(break_down(assoc), @splitter, 0, 0, []), @break_line) <> "\n"
+    Enum.join(indent_part(break_down(assoc), @splitter, 0, 0, []), @break_line)
   end
 
   defp indent_part(parts, _, _, _, output) when length(parts) == length(output), do: output
