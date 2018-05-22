@@ -3,10 +3,6 @@ defmodule UtilsTest do
 
   alias PhpAssocMap.Utils
 
-  test "flatten associative array with single quotes" do
-    assert Mock.flatten_source == Utils.flatten_assoc(Mock.flatten_single_quote_source)
-  end
-
   test "flatten associative array" do
     assert Mock.flatten_source == Utils.flatten_assoc(Mock.spaced_source)
   end

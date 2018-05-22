@@ -7,7 +7,6 @@ defmodule PhpAssocMap.Utils do
   @closing_regex ~r{\]}
   @opening_regex ~r{\[}
   @comment_regex ~r{\/\*[\s\S]*?\*\/|([^:]|^)\/\/.*$}
-  @single_quote_regex ~r{['](.*?)[']}
   @start_named_array_regex ~r{(array\()(?=(?:[^"]|"[^"]*")*$)}
   @end_named_array_regex ~r{(\))(?=(?:[^"]|"[^"]*")*$)}
 
@@ -27,9 +26,6 @@ defmodule PhpAssocMap.Utils do
     |> remove_comments()
     |> convert_arrays()
     |> String.replace(@flatten_regex, "")
-    |> String.replace("\\'", "'")
-    |> String.replace("'", "\"")
-    |> String.replace(@single_quote_regex, "\"\\1\"")
   end
 
   def explode(assoc), do: explode(assoc, {:spaces, 2})
