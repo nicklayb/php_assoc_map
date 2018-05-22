@@ -11,4 +11,11 @@ defmodule Map.ParseTest do
   test "parses associative array to map" do
     assert PhpAssocMap.to_map(Mock.flatten_source) == @source
   end
+
+  test "parses with single quotes and serialize back" do
+    map = PhpAssocMap.to_map(Mock.flatten_single_quote_source)
+
+    assert Mock.flatten_source == PhpAssocMap.from_map(map)
+  end
+
 end
