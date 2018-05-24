@@ -142,7 +142,7 @@ source = """
 ["lvl_1_1"=>["lvl_2_1"=>1,"lvl_2_2"=>"Single quoted string","lvl_2_3"=>"Double quoted string"],"lvl_1_2"=>false]
 """
 # You can replace de 2 below for the number of space to use
-PhpAssocMap.Utils.explode(source, {:spaces, 2})
+PhpAssocMap.Exploder.explode(source, {:spaces, 2})
 
 """
 [
@@ -161,7 +161,7 @@ PhpAssocMap.Utils.explode(source, {:spaces, 2})
 ##### Or with tabs instead
 
 ```elixir
-PhpAssocMap.Utils.explode(source, {:tabs})
+PhpAssocMap.Exploder.explode(source, {:tabs})
 
 """
 [
