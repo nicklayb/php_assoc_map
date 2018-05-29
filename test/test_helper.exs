@@ -48,7 +48,7 @@ defmodule Mock do
       {"lvl_1_2", false},
       {"lvl_1_3", [
           {"lvl_2_1", true},
-          {"lvl_2_2", 54.12},
+          {"lvl_2_2", 54.12}
         ]
       },
     ]

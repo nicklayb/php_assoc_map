@@ -16,6 +16,7 @@ defmodule PhpAssocMap.Utils do
     assoc_string
     |> remove_comments()
     |> convert_arrays()
+    |> String.replace(not_in_quotes(",]"), "]")
     |> String.replace(not_in_quotes("\n"), "")
     |> String.replace(not_in_quotes("\s"), "")
   end
