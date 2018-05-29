@@ -1,6 +1,6 @@
 defmodule PhpAssocMap.Map.Serializer do
 
-  alias PhpAssocMap.Utils
+  alias PhpAssocMap.{Utils, TypeParser}
 
   def from_map(map) do
     Utils.wrap(Enum.join(from_map(map, []), ","), "[", "]")
@@ -19,7 +19,7 @@ defmodule PhpAssocMap.Map.Serializer do
   end
 
   defp serialize({key, value}) when is_binary(value) do
-    Utils.associate(key, Utils.wrap(value, "\""))
+    Utils.associate(key, TypeParser.stringify(value))
   end
 
   defp serialize({key, value}) do
