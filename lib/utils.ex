@@ -1,6 +1,5 @@
 defmodule PhpAssocMap.Utils do
   @key_value_splitter "=>"
-  @flatten_regex ~r{\s(?=([^"^']*["'][^"^']*["'])*[^"^']*$)}
   @comment_regex ~r{\/\*[\s\S]*?\*\/|([^:]|^)\/\/.*$}
   alias PhpAssocMap.AssocSlicer
 
@@ -10,14 +9,15 @@ defmodule PhpAssocMap.Utils do
   end
 
   def associate(key, value) do
-    "\"#{key}\"#{@key_value_splitter}#{value}"
+    "'#{key}'#{@key_value_splitter}#{value}"
   end
 
   def flatten_assoc(assoc_string) do
     assoc_string
     |> remove_comments()
     |> convert_arrays()
-    |> String.replace(@flatten_regex, "")
+    |> String.replace(not_in_quotes("\n"), "")
+    |> String.replace(not_in_quotes("\s"), "")
   end
 
   def remove_comments(assoc) do
@@ -26,7 +26,7 @@ defmodule PhpAssocMap.Utils do
   end
 
   def not_in_quotes(char) do
-    ~r{(?!\B"[^"]*)(#{char})(?![^"]*"\B)}
+    ~r{(?!\B'[^']*)(#{char})(?![^']*'\B)}
   end
 
   def split_lines(assoc_array) do

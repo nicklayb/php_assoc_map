@@ -1,6 +1,5 @@
 defmodule PhpAssocMap.Tuple.Serializer do
-
-  alias PhpAssocMap.Utils
+  alias PhpAssocMap.{Utils, TypeParser}
 
   def from_tuple(tuple) do
     Utils.wrap(Enum.join(from_tuple(tuple, []), ","), "[", "]")
@@ -19,7 +18,7 @@ defmodule PhpAssocMap.Tuple.Serializer do
   end
 
   defp serialize({key, value}) when is_binary(value) do
-    Utils.associate(key, Utils.wrap(value, "\""))
+    Utils.associate(key, TypeParser.stringify(value))
   end
 
   defp serialize({key, value}) do

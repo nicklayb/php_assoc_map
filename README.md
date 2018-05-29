@@ -21,6 +21,10 @@ end
 
 Don't forget to run `mix deps.get` to update dependencies
 
+## Limitations
+
+This library only parses single quoted string as key and value. In PHP, the double quoted string can do interpolation which makes them a bit greedy on performance. For this particular reason, and because parsing both quotation adds a lot of complexity while you should just stick to standards, you cannot use double quotes " as string delimiter
+
 ## Usage
 
 ### Parsing
@@ -34,7 +38,7 @@ source = """
   'lvl_1_1' => [
     'lvl_2_1' => 1,
     'lvl_2_2' => 'Single quoted string',
-    'lvl_2_3' => "Double quoted string"
+    'lvl_2_3' => 'A string, with "commas" and stuff'
   ],
   'lvl_1_2' => false
 ]
@@ -47,7 +51,7 @@ PhpAssocMap.to_map source
   "lvl_1_1": %{
     "lvl_2_1": 1,
     "lvl_2_2": "Single quoted string",
-    "lvl_2_3": "Double quoted string"
+    "lvl_2_3": "A string, with "commas" and stuff"
   },
   "lvl_1_2": false
 }
@@ -63,7 +67,7 @@ source = """
   'lvl_1_1' => [
     'lvl_2_1' => 1,
     'lvl_2_2' => 'Single quoted string',
-    'lvl_2_3' => "Double quoted string"
+    'lvl_2_3' => "A string, with "commas" and stuff"
   ],
   'lvl_1_2' => false
 ]
@@ -76,7 +80,7 @@ PhpAssocMap.to_tuple source
   { :lvl_1_1, [
       {:lvl_2_1, 1},
       {:lvl_2_2, "Single quoted string"},
-      {:lvl_2_3, "Double quoted string"}
+      {:lvl_2_3, "A string, with "commas" and stuff"}
     ]
   },
   {:lvl_1_2, false}
@@ -94,7 +98,7 @@ source = %{
   "lvl_1_1": %{
     "lvl_2_1": 1,
     "lvl_2_2": "Single quoted string",
-    "lvl_2_3": "Double quoted string"
+    "lvl_2_3": "A string, with "commas" and stuff"
   },
   "lvl_1_2": false
 }
@@ -104,7 +108,7 @@ PhpAssocMap.from_map source
 # Outputs
 
 """
-["lvl_1_1"=>["lvl_2_1"=>1,"lvl_2_2"=>"Single quoted string","lvl_2_3"=>"Double quoted string"],"lvl_1_2"=>false]
+['lvl_1_1'=>['lvl_2_1'=>1,'lvl_2_2'=>'Single quoted string','lvl_2_3'=>'A string, with "commas" and stuff'],'lvl_1_2'=>false]
 """
 
 ```
@@ -117,7 +121,7 @@ source = [
   { :lvl_1_1, [
       {:lvl_2_1, 1},
       {:lvl_2_2, "Single quoted string"},
-      {:lvl_2_3, "Double quoted string"}
+      {:lvl_2_3, "A string, with "commas" and stuff"}
     ]
   },
   {:lvl_1_2, false}
@@ -128,7 +132,7 @@ PhpAssocMap.from_tuple source
 # Outputs
 
 """
-["lvl_1_1"=>["lvl_2_1"=>1,"lvl_2_2"=>"Single quoted string","lvl_2_3"=>"Double quoted string"],"lvl_1_2"=>false]
+['lvl_1_1'=>['lvl_2_1'=>1,'lvl_2_2'=>'Single quoted string','lvl_2_3'=>'A string, with "commas" and stuff'],'lvl_1_2'=>false]
 """
 
 ```
@@ -139,7 +143,7 @@ If you would like to print the serialized array to a PHP file, you might want to
 
 ```elixir
 source = """
-["lvl_1_1"=>["lvl_2_1"=>1,"lvl_2_2"=>"Single quoted string","lvl_2_3"=>"Double quoted string"],"lvl_1_2"=>false]
+['lvl_1_1'=>['lvl_2_1'=>1,'lvl_2_2'=>'Single quoted string','lvl_2_3'=>'A string, with "commas" and stuff'],'lvl_1_2'=>false]
 """
 # You can replace de 2 below for the number of space to use
 PhpAssocMap.Exploder.explode(source, {:spaces, 2})
@@ -149,7 +153,7 @@ PhpAssocMap.Exploder.explode(source, {:spaces, 2})
 \s\s'lvl_1_1' => [
 \s\s\s\s'lvl_2_1' => 1,
 \s\s\s\s'lvl_2_2' => 'Single quoted string',
-\s\s\s\s'lvl_2_3' => "Double quoted string"
+\s\s\s\s'lvl_2_3' => 'A string, with "commas" and stuff'
 \s\s\s\s],
 \s\s'lvl_1_2' => false
 \s\s]
@@ -168,7 +172,7 @@ PhpAssocMap.Exploder.explode(source, {:tabs})
 \t'lvl_1_1' => [
 \t\t'lvl_2_1' => 1,
 \t\t'lvl_2_2' => 'Single quoted string',
-\t\t'lvl_2_3' => "Double quoted string"
+\t\t'lvl_2_3' => 'A string, with "commas" and stuff'
 \t\t],
 \t'lvl_1_2' => false
 \t]
@@ -194,7 +198,7 @@ before the array return along with the endig semi-colon
 
 ### Keyed array
 
-Currently, the library on supports named keys, which means that straight are not parsed a the moment. This is in the todo list
+Currently, the library only supports named keys, which means that straight are not parsed a the moment. This is in the todo list
 
 ### To do
 - [x] Parse 2+ level deep (*Special thanks to @richthedev*)

@@ -59,8 +59,13 @@ defmodule PhpAssocMap.TypeParser do
   def clean_string(string) do
     string
     |> String.replace("\\\"", "\"")
-    |> String.replace("\"", "\\\"")
     |> String.replace("\\'", "'")
+  end
+
+  def stringify(string) do
+    string
+    |> String.replace("'", "\\'")
+    |> Utils.wrap("'")
   end
 
   defp nil?(value), do: String.downcase(value) == "null" || String.downcase(value) == "nil"
