@@ -37,7 +37,7 @@ defmodule PhpAssocMap.MixProject do
     [
       {:ex_doc, "~> 0.19", only: :dev, runtime: false},
       {:credo, "~> 0.9.1", only: [:dev, :test], runtime: false},
-      {:excoveralls, "~> 0.8", only: :test},
+      {:excoveralls, "~> 0.10", only: :test},
       {:mix_test_watch, "~> 0.6", only: :dev, runtime: false}
     ]
   end
