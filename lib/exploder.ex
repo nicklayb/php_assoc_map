@@ -1,18 +1,39 @@
 defmodule PhpAssocMap.Exploder do
-  alias PhpAssocMap.Utils
   @break_line "\n"
 
+  @doc """
+    Indents the whole associative array using either tabs or spaces. Defaults to 2 spaces.
+
+    Use explode/2 to specify identation.
+
+    Exemples
+
+        iex> PhpAssocMap.Exploder.explode("['key'=>['next'=>'value']]")
+        "[\n  'key'=>[\n    'next'=>'value'\n    ]\n  ]"
+
+        iex> PhpAssocMap.Exploder.explode("['key'=>['next'=>'value']]", {:tabs})
+        "[\n\t'key'=>[\n\t\t'next'=>'value'\n\t\t]\n\t]"
+
+        iex> PhpAssocMap.Exploder.explode("['key'=>['next'=>'value']]", {:spaces, 1})
+        "[\n 'key'=>[\n  'next'=>'value'\n  ]\n ]"
+  """
+  @spec explode(binary()) :: binary()
   def explode(assoc), do: explode(assoc, {:spaces, 2})
 
   @splitter "\s"
   def explode(assoc, {:spaces, count}) do
     splitter = String.duplicate(@splitter, count)
-    Enum.join(indent_part(break_down(assoc), splitter, 0, 0, []), @break_line)
+    explode_with(assoc, splitter)
   end
 
   @splitter "\t"
-  def explode(assoc, {:tabs}) do
-    Enum.join(indent_part(break_down(assoc), @splitter, 0, 0, []), @break_line)
+  def explode(assoc, {:tabs}), do: explode_with(assoc, @splitter)
+
+  defp explode_with(assoc, splitter) do
+    assoc
+    |> break_down()
+    |> indent_part(splitter, 0, 0, [])
+    |> Enum.join(@break_line)
   end
 
   defp indent_part(parts, _, _, _, output) when length(parts) == length(output), do: output
@@ -30,18 +51,20 @@ defmodule PhpAssocMap.Exploder do
   end
 
   defp increment_level(level, part) do
-    if Regex.match?(Utils.not_in_quotes("\\["), part), do: level + 1, else: level
+    if Regex.match?(not_in_quotes("\\["), part), do: level + 1, else: level
   end
 
   defp decrement_level(level, part) do
-    if Regex.match?(Utils.not_in_quotes("\\]"), part), do: level - 1, else: level
+    if Regex.match?(not_in_quotes("\\]"), part), do: level - 1, else: level
   end
 
-  def break_down(assoc) do
+  defp break_down(assoc) do
     assoc
-    |> String.replace(Utils.not_in_quotes("\\["), "\\1\n")
-    |> String.replace(Utils.not_in_quotes("\\]"), "\n\\1")
-    |> String.replace(Utils.not_in_quotes(","), "\\1\n")
+    |> String.replace(not_in_quotes("\\["), "\\1\n")
+    |> String.replace(not_in_quotes("\\]"), "\n\\1")
+    |> String.replace(not_in_quotes(","), "\\1\n")
     |> String.split("\n")
   end
+
+  defp not_in_quotes(char), do: ~r{(?!\B'[^']*)(#{char})(?![^']*'\B)}
 end

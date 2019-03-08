@@ -1,54 +1,27 @@
 defmodule UtilsTest do
   use ExUnit.Case
+  doctest PhpAssocMap.Utils
+  doctest PhpAssocMap
 
   alias PhpAssocMap.Utils
 
-  test "flatten associative array" do
-    assert Mock.flatten_source == Utils.flatten_assoc(Mock.spaced_source)
+  test "wraps expression with one value" do
+    assert Utils.wrap("test", "\"") == "\"test\""
   end
 
-  test "extract bracket content" do
-    original = "[Unwrapped]"
-    expected = "Unwrapped"
-    assert Utils.unwrap(original) == expected
+  test "wraps expression with two values" do
+    assert Utils.wrap("test", "[", "]") == "[test]"
   end
 
-  test "flatten a flatten associative array" do
-    assert Mock.flatten_source == Utils.flatten_assoc(Mock.flatten_source)
+  test "stringify expression" do
+    assert Utils.stringify("Jon's") == "'Jon\\'s'"
   end
 
-  test "splits by comma" do
-    assert Utils.split_lines(Mock.flatten_source) == Mock.splitted_source
+  test "associate key and value" do
+    assert Utils.associate("key", "value") == "'key'=>value"
   end
 
-  test "splits entry by first key value" do
-    value = "'lvl_1_2'=>['nested'=>'things']"
-    expected = {"'lvl_1_2'", "['nested'=>'things']"}
-
-    assert Utils.split_key_value(value) == expected
-  end
-
-  test "clean up php file" do
-    source = "<?php\n\nreturn #{Mock.spaced_source}"
-
-    assert Utils.clean_up(source) == Mock.spaced_source
-  end
-
-  test "cleans up a complexe array" do
-    assert Utils.flatten_assoc(Mock.complex_source) == Mock.flatten_source
-  end
-
-  test "converts named array to brackets" do
-    converted = Utils.convert_arrays(Mock.arrayed_source)
-    assert Utils.flatten_assoc(converted) == Mock.flatten_source
-  end
-
-  test "removes comment from array" do
-    assert Utils.remove_comments(Mock.commented_source) == Mock.spaced_source
-  end
-
-  test "removes comments and flatten array" do
-    uncommented = Utils.remove_comments(Mock.commented_source)
-    assert Utils.flatten_assoc(uncommented) == Mock.flatten_source
+  test "correctly gets the ast" do
+    assert PhpAssocMap.ast("['key'=>'value']")
   end
 end

@@ -1,68 +1,47 @@
 defmodule PhpAssocMap.Utils do
+  @doc """
+    Converts a key and a value into an associative array association using arrow
+
+    ## Exemples
+
+        iex> PhpAssocMap.Utils.associate("my_key", "'Some value'")
+        "'my_key'=>'Some value'"
+  """
   @key_value_splitter "=>"
-  @comment_regex ~r{\/\*[\s\S]*?\*\/|([^:]|^)\/\/.*$}
-  alias PhpAssocMap.AssocSlicer
+  @spec associate(binary(), binary()) :: binary()
+  def associate(key, value), do: "'#{key}'#{@key_value_splitter}#{value}"
 
-  def split_key_value(entry) do
-    splitted = String.split(entry, @key_value_splitter, parts: 2)
-    {Enum.at(splitted, 0), Enum.at(splitted, 1)}
+  @doc """
+    Convert a string for a literal string by escaping quotes and wrapping into them
+
+    ## Exemples
+
+        iex> PhpAssocMap.Utils.stringify("Jon's")
+        "'Jon\\\\'s'"
+  """
+  @spec stringify(binary()) :: binary()
+  def stringify(string) do
+    string
+    |> String.replace("'", "\\'")
+    |> wrap("'")
   end
 
-  def associate(key, value) do
-    "'#{key}'#{@key_value_splitter}#{value}"
-  end
+  @doc """
+    Wraps a value inside specified string.
 
-  def flatten_assoc(assoc_string) do
-    assoc_string
-    |> remove_comments()
-    |> convert_arrays()
-    |> String.replace(not_in_quotes("\n"), "")
-    |> String.replace(not_in_quotes("\s"), "")
-    |> String.replace(not_in_quotes(",]"), "]")
-  end
+    Using wrap/2 will wrap both end using the same string.
+    Using the wrap/3 will wrap left with second parameter and right with third
 
-  def remove_comments(assoc) do
-    assoc
-    |> String.replace(@comment_regex, "")
-  end
+    ## Exemples
 
-  def not_in_quotes(char) do
-    ~r{(?!\B'[^']*)(#{char})(?![^']*'\B)}
-  end
+        iex> PhpAssocMap.Utils.wrap("house", "*")
+        "*house*"
 
-  def split_lines(assoc_array) do
-    AssocSlicer.parse(unwrap(assoc_array))
-  end
-
-  def unwrap(string) do
-    String.slice(string, 1, String.length(string) - 2)
-  end
-
+        iex> PhpAssocMap.Utils.wrap("house", "{", "}")
+        "{house}"
+  """
+  @spec wrap(binary(), binary()) :: binary()
+  @spec wrap(binary(), binary(), binary()) :: binary()
   def wrap(string, left), do: wrap(string, left, left)
-
   def wrap(string, left, right), do: left <> string <> right
-
-  @clean_before ~r{[^\[]*}
-  @clean_after ~r{;$}
-  def clean_up(raw) do
-    raw
-    |> String.replace(@clean_before, "", global: false)
-    |> String.replace(@clean_after, "")
-  end
-
-  @start_named_array_regex "array\\("
-  @end_named_array_regex "\\)"
-  def convert_arrays(assoc) do
-    assoc
-    |> String.replace(not_in_quotes(@start_named_array_regex), "[")
-    |> String.replace(not_in_quotes(@end_named_array_regex), "]")
-  end
-
-  def bracket_count_matches?(line), do: count(line, not_in_quotes("\\[")) == count(line, not_in_quotes("\\]"))
-
-  defp count(line, regex), do: matches_length(Regex.scan(regex, line))
-
-  defp matches_length([]), do: 0
-
-  defp matches_length(matches), do: length(matches)
 end

@@ -7,6 +7,13 @@ Library that parses PHP's associative array into Elixir's map.
 
 At his current state,
 
+
+## NEW
+
+A rewrite has been done to the parsing to accelerate the process and make more stable. The use of Leex and Yecc had become very handy. Some utils have been removed, if you were using them, we recommend not migrating to 1.0 yet. If you were using `PhpAssocMap.to_tuple/1` or `PhpAssocMap.to_map/1`, everthing should work as it was.
+
+Feel free to post any issue.
+
 ## Installation
 
 Add the following to your `mix.exs` file:
@@ -14,16 +21,16 @@ Add the following to your `mix.exs` file:
 defp deps do
   [
     # ...
-    {:php_assoc_map, "~> 0.4"}
+    {:php_assoc_map, "~> 1.0"}
   ]
 end
 ```
 
 Don't forget to run `mix deps.get` to update dependencies
 
-## Limitations
+### Note
 
-This library only parses single quoted string as key and value. In PHP, the double quoted string can do interpolation which makes them a bit greedy on performance. For this particular reason, and because parsing both quotation adds a lot of complexity while you should just stick to standards, you cannot use double quotes " as string delimiter
+This library only parses single quoted string as key and value. In PHP, the double quoted string can do interpolation which makes them a bit greedy on performance. For this particular reason, the serialized array will be using single quote. But you can fill any format of associative array (using either single (') or double (") quote as string delimiter)
 
 ## Usage
 
@@ -77,13 +84,13 @@ PhpAssocMap.to_tuple source
 
 # Outputs
 [
-  { :lvl_1_1, [
-      {:lvl_2_1, 1},
-      {:lvl_2_2, "Single quoted string"},
-      {:lvl_2_3, "A string, with "commas" and stuff"}
+  {"lvl_1_1", [
+      {"lvl_2_1", 1},
+      {"lvl_2_2", "Single quoted string"},
+      {"lvl_2_3", "A string, with "commas" and stuff"}
     ]
   },
-  {:lvl_1_2, false}
+  {"lvl_1_2", false}
 }
 
 ```
@@ -118,13 +125,13 @@ PhpAssocMap.from_map source
 If you would like to retrieve a list o tuple instead of mapof you array, the function `to_tuple/1` will be your friend.
 ```elixir
 source = [
-  { :lvl_1_1, [
-      {:lvl_2_1, 1},
-      {:lvl_2_2, "Single quoted string"},
-      {:lvl_2_3, "A string, with "commas" and stuff"}
+  {"lvl_1_1", [
+      {"lvl_2_1", 1},
+      {"lvl_2_2", "Single quoted string"},
+      {"lvl_2_3", "A string, with "commas" and stuff"}
     ]
   },
-  {:lvl_1_2, false}
+  {"lvl_1_2", false}
 }
 
 PhpAssocMap.from_tuple source
@@ -181,26 +188,9 @@ PhpAssocMap.Exploder.explode(source, {:tabs})
 
 *The function `explode/1` calls back `explode/2` with `{:spaces, 2}` as second parameter*
 
-### Utilities
-
-#### Clean up
-
-The library includes `PhpAssocMap.Utils.clean_up/1` which cleans up php bloat from the associative array. It remove the
-```php
-<?php
-
-return
-```
-
-before the array return along with the endig semi-colon
-
 ## Limitations
 
 ### Keyed array
 
-Currently, the library only supports named keys, which means that straight are not parsed a the moment. This is in the todo list
-
-### To do
-- [x] Parse 2+ level deep (*Special thanks to @richthedev*)
-- [ ] Parse indexed array also
+Currently, the library only supports named keys, which means that straight are not parsed a the moment.
 
