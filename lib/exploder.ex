@@ -1,6 +1,22 @@
 defmodule PhpAssocMap.Exploder do
   @break_line "\n"
 
+  @doc """
+    Indents the whole associative array using either tabs or spaces. Defaults to 2 spaces.
+
+    Use explode/2 to specify identation.
+
+    Exemples
+
+        iex> PhpAssocMap.Exploder.explode("['key'=>['next'=>'value']]")
+        "[\n  'key'=>[\n    'next'=>'value'\n    ]\n  ]"
+
+        iex> PhpAssocMap.Exploder.explode("['key'=>['next'=>'value']]", {:tabs})
+        "[\n\t'key'=>[\n\t\t'next'=>'value'\n\t\t]\n\t]"
+
+        iex> PhpAssocMap.Exploder.explode("['key'=>['next'=>'value']]", {:spaces, 1})
+        "[\n 'key'=>[\n  'next'=>'value'\n  ]\n ]"
+  """
   @spec explode(binary()) :: binary()
   def explode(assoc), do: explode(assoc, {:spaces, 2})
 
