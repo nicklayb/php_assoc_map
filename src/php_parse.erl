@@ -2,6 +2,7 @@
 -export([parse/1, parse_and_scan/1, format_error/1]).
 -file("src/php_parse.yrl", 23).
 unwrap({_, _, V}) -> V.
+unquote(V) -> re:replace(unwrap(V), "\\\\", "", [{return,binary}]).
 
 -file("/usr/local/Cellar/erlang/21.2/lib/erlang/lib/parsetools-2.1.8/include/yeccpre.hrl", 0).
 %%
@@ -175,7 +176,7 @@ yecctoken2string(Other) ->
 
 
 
--file("src/php_parse.erl", 178).
+-file("src/php_parse.erl", 179).
 
 -dialyzer({nowarn_function, yeccpars2/7}).
 yeccpars2(0=S, Cat, Ss, Stack, T, Ts, Tzr) ->
@@ -239,13 +240,16 @@ yeccpars2_2(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccgoto_item(hd(Ss), Cat, Ss, Stack, T, Ts, Tzr).
 
 yeccpars2_3(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
- yeccgoto_item(hd(Ss), Cat, Ss, Stack, T, Ts, Tzr).
+ NewStack = yeccpars2_3_(Stack),
+ yeccgoto_item(hd(Ss), Cat, Ss, NewStack, T, Ts, Tzr).
 
 yeccpars2_4(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
- yeccgoto_item(hd(Ss), Cat, Ss, Stack, T, Ts, Tzr).
+ NewStack = yeccpars2_4_(Stack),
+ yeccgoto_item(hd(Ss), Cat, Ss, NewStack, T, Ts, Tzr).
 
 yeccpars2_5(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
- yeccgoto_item(hd(Ss), Cat, Ss, Stack, T, Ts, Tzr).
+ NewStack = yeccpars2_5_(Stack),
+ yeccgoto_item(hd(Ss), Cat, Ss, NewStack, T, Ts, Tzr).
 
 yeccpars2_6(S, close_array, Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 11, Ss, Stack, T, Ts, Tzr);
@@ -253,7 +257,8 @@ yeccpars2_6(S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_0(S, Cat, Ss, Stack, T, Ts, Tzr).
 
 yeccpars2_7(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
- yeccgoto_item(hd(Ss), Cat, Ss, Stack, T, Ts, Tzr).
+ NewStack = yeccpars2_7_(Stack),
+ yeccgoto_item(hd(Ss), Cat, Ss, NewStack, T, Ts, Tzr).
 
 -dialyzer({nowarn_function, yeccpars2_8/7}).
 yeccpars2_8(S, arrow, Ss, Stack, T, Ts, Tzr) ->
@@ -329,6 +334,38 @@ yeccgoto_item(12, Cat, Ss, Stack, T, Ts, Tzr) ->
 yeccgoto_item(15=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_16(_S, Cat, Ss, Stack, T, Ts, Tzr).
 
+-compile({inline,yeccpars2_3_/1}).
+-file("src/php_parse.yrl", 9).
+yeccpars2_3_(__Stack0) ->
+ [__1 | __Stack] = __Stack0,
+ [begin
+   unwrap ( __1 )
+  end | __Stack].
+
+-compile({inline,yeccpars2_4_/1}).
+-file("src/php_parse.yrl", 8).
+yeccpars2_4_(__Stack0) ->
+ [__1 | __Stack] = __Stack0,
+ [begin
+   unwrap ( __1 )
+  end | __Stack].
+
+-compile({inline,yeccpars2_5_/1}).
+-file("src/php_parse.yrl", 6).
+yeccpars2_5_(__Stack0) ->
+ [__1 | __Stack] = __Stack0,
+ [begin
+   unwrap ( __1 )
+  end | __Stack].
+
+-compile({inline,yeccpars2_7_/1}).
+-file("src/php_parse.yrl", 7).
+yeccpars2_7_(__Stack0) ->
+ [__1 | __Stack] = __Stack0,
+ [begin
+   unquote ( __1 )
+  end | __Stack].
+
 -compile({inline,yeccpars2_10_/1}).
 -file("src/php_parse.yrl", 15).
 yeccpars2_10_(__Stack0) ->
@@ -370,4 +407,4 @@ yeccpars2_16_(__Stack0) ->
   end | __Stack].
 
 
--file("src/php_parse.yrl", 25).
+-file("src/php_parse.yrl", 26).

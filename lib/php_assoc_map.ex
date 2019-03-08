@@ -14,7 +14,7 @@ defmodule PhpAssocMap do
         %{"key" => %{"another_key" => "value"}}
   """
   @spec to_map(binary() | charlist()) :: any()
-  def to_map(string), do: string |> ast() |> PhpAssocMap.Map.Parser.parse()
+  def to_map(string), do: string |> to_tuple() |> PhpAssocMap.Map.Parser.parse()
 
   @doc """
     Converts a map structure to an associative array string. The string key and value are single quoted
@@ -43,7 +43,7 @@ defmodule PhpAssocMap do
         [{"key", [{"another_key", "value"}]}]
   """
   @spec to_tuple(binary() | charlist()) :: [tuple()]
-  def to_tuple(string), do: string |> ast() |> PhpAssocMap.Tuple.Parser.parse()
+  def to_tuple(string), do: string |> ast()
 
   @doc """
     Converts a keyword list structure to an associative array string. The string key and value are single quoted
@@ -64,7 +64,7 @@ defmodule PhpAssocMap do
     ## Exmples
 
         iex> PhpAssocMap.ast("['key'=>['another_key'=>'value']]")
-        [{{:string, 1, "key"}, [{{:string, 1, "another_key"}, {:string, 1, "value"}}]}]
+        [{"key", [{"another_key", "value"}]}]
   """
   @spec ast(charlist() | binary()) :: [tuple()]
   def ast(chars) when is_bitstring(chars), do: chars |> String.to_charlist() |> ast()

@@ -40,8 +40,8 @@ Rules.
 {Comma}       : {token, {comma,         TokenLine, list_to_atom(TokenChars)}}.
 {IntValue}    : {token, {int,           TokenLine, list_to_integer(TokenChars)}}.
 {FloatValue}  : {token, {float,         TokenLine, list_to_float(TokenChars)}}.
-{String}      : {token, {string,        TokenLine, list_to_binary(string:trim(TokenChars, both, "\""))}}.
-{Charlist}    : {token, {string,        TokenLine, list_to_binary(string:trim(TokenChars, both, "\'"))}}.
+{String}      : {token, {string,        TokenLine, string:trim(TokenChars, both, "\"")}}.
+{Charlist}    : {token, {string,        TokenLine, string:trim(TokenChars, both, "\'")}}.
 {True}        : {token, {bool,          TokenLine, true}}.
 {False}       : {token, {bool,          TokenLine, false}}.
 {OpenArray}   : {token, {open_array,    TokenLine, list_to_atom(TokenChars)}}.

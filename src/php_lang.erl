@@ -777,12 +777,12 @@ yyaction_8(TokenChars, TokenLine) ->
 -compile({inline,yyaction_9/2}).
 -file("src/php_lang.xrl", 41).
 yyaction_9(TokenChars, TokenLine) ->
-     { token, { string, TokenLine, list_to_binary (string : trim (TokenChars, both, "\"")) } } .
+     { token, { string, TokenLine, string : trim (TokenChars, both, "\"") } } .
 
 -compile({inline,yyaction_10/2}).
 -file("src/php_lang.xrl", 42).
 yyaction_10(TokenChars, TokenLine) ->
-     { token, { string, TokenLine, list_to_binary (string : trim (TokenChars, both, "'")) } } .
+     { token, { string, TokenLine, string : trim (TokenChars, both, "'") } } .
 
 -compile({inline,yyaction_11/1}).
 -file("src/php_lang.xrl", 43).
