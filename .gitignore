@@ -23,3 +23,5 @@ erl_crash.dump
 php_assoc_map-*.tar
 
 /.elixir_ls
+
+src/*.erl
