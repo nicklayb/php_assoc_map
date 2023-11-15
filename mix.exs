@@ -4,11 +4,11 @@ defmodule PhpAssocMap.MixProject do
   def project do
     [
       app: :php_assoc_map,
-      version: "1.0.2",
+      version: "2.0.2",
       name: "PhpAssocMap",
       description: "Library that parses PHP's associative array into Elixir's map.",
       source_url: "https://github.com/nicklayb/php_assoc_map",
-      elixir: "~> 1.6",
+      elixir: "~> 1.7",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       package: package(),
