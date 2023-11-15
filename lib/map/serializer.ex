@@ -1,6 +1,5 @@
 defmodule PhpAssocMap.Map.Serializer do
-
-  alias PhpAssocMap.{Utils}
+  alias PhpAssocMap.Utils
 
   def from_map(map), do: Utils.wrap(Enum.join(from_map(map, []), ","), "[", "]")
   def from_map(map, list) when length(list) == map_size(map), do: list

@@ -1,5 +1,7 @@
 defmodule PhpAssocMap do
-
+  alias PhpAssocMap.Map.Parser, as: MapParser
+  alias PhpAssocMap.Map.Serializer, as: MapSerializer
+  alias PhpAssocMap.Tuple.Serializer, as: TupleSerializer
   @doc """
     Parses an associative array string (or charlist) to a key-valued map. Both single and double quotes are supported.
 
@@ -14,7 +16,7 @@ defmodule PhpAssocMap do
         %{"key" => %{"another_key" => "value"}}
   """
   @spec to_map(binary() | charlist()) :: any()
-  def to_map(string), do: string |> to_tuple() |> PhpAssocMap.Map.Parser.parse()
+  def to_map(string), do: string |> to_tuple() |> MapParser.parse()
 
   @doc """
     Converts a map structure to an associative array string. The string key and value are single quoted
@@ -27,7 +29,7 @@ defmodule PhpAssocMap do
         "['key'=>['another_key'=>'value']]"
   """
   @spec from_map(map()) :: binary()
-  def from_map(map), do: PhpAssocMap.Map.Serializer.from_map(map)
+  def from_map(map), do: MapSerializer.from_map(map)
 
   @doc """
     Parses an associative array string (or charlist) to a key-valued keyword list. Both single and double quotes are supported.
@@ -56,7 +58,7 @@ defmodule PhpAssocMap do
         "['key'=>['another_key'=>'value']]"
   """
   @spec from_tuple([tuple()]) :: binary()
-  def from_tuple(tuple), do: PhpAssocMap.Tuple.Serializer.from_tuple(tuple)
+  def from_tuple(tuple), do: TupleSerializer.from_tuple(tuple)
 
   @doc """
     Gets the document AST from leex and yecc parser. The ast is automatically obtain from to_tuple/1 and to_map/1
@@ -70,7 +72,7 @@ defmodule PhpAssocMap do
   def ast(chars) when is_bitstring(chars), do: chars |> String.to_charlist() |> ast()
   def ast(string) do
     with {:ok, tokens, _} <- :php_lang.string(string),
-      {:ok, ast} = :php_parse.parse(tokens) do
+      {:ok, ast} <- :php_parse.parse(tokens) do
       ast
     end
   end
