@@ -4,7 +4,7 @@
 unwrap({_, _, V}) -> V.
 unquote(V) -> re:replace(unwrap(V), "\\\\", "", [{return,binary}]).
 
--file("/usr/local/Cellar/erlang/21.2/lib/erlang/lib/parsetools-2.1.8/include/yeccpre.hrl", 0).
+-file("/home/nboisvert/.asdf/installs/erlang/21.3.8/lib/parsetools-2.1.8/include/yeccpre.hrl", 0).
 %%
 %% %CopyrightBegin%
 %%

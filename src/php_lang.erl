@@ -1,4 +1,4 @@
--file("/usr/local/Cellar/erlang/21.2/lib/erlang/lib/parsetools-2.1.8/include/leexinc.hrl", 0).
+-file("/home/nboisvert/.asdf/installs/erlang/21.3.8/lib/parsetools-2.1.8/include/leexinc.hrl", 0).
 %% The source of this file is part of leex distribution, as such it
 %% has the same Copyright as the other files in the leex
 %% distribution. The Copyright is defined in the accompanying file
@@ -14,7 +14,9 @@
 %% User code. This is placed here to allow extra attributes.
 -file("src/php_lang.xrl", 51).
 
--file("/usr/local/Cellar/erlang/21.2/lib/erlang/lib/parsetools-2.1.8/include/leexinc.hrl", 14).
+encode(String) -> unicode:characters_to_binary(String).
+
+-file("/home/nboisvert/.asdf/installs/erlang/21.3.8/lib/parsetools-2.1.8/include/leexinc.hrl", 14).
 
 format_error({illegal,S}) -> ["illegal characters ",io_lib:write_string(S)];
 format_error({user,S}) -> S.
@@ -305,7 +307,7 @@ adjust_line(T, A, [_|Cs], L) ->
 %% return signal either an unrecognised character or end of current
 %% input.
 
--file("src/php_lang.erl", 307).
+-file("src/php_lang.erl", 309).
 yystate() -> 16.
 
 yystate(66, [115|Ics], Line, Tlen, Action, Alen) ->
@@ -777,12 +779,12 @@ yyaction_8(TokenChars, TokenLine) ->
 -compile({inline,yyaction_9/2}).
 -file("src/php_lang.xrl", 41).
 yyaction_9(TokenChars, TokenLine) ->
-     { token, { string, TokenLine, string : trim (TokenChars, both, "\"") } } .
+     { token, { string, TokenLine, encode (string : trim (TokenChars, both, "\"")) } } .
 
 -compile({inline,yyaction_10/2}).
 -file("src/php_lang.xrl", 42).
 yyaction_10(TokenChars, TokenLine) ->
-     { token, { string, TokenLine, string : trim (TokenChars, both, "'") } } .
+     { token, { string, TokenLine, encode (string : trim (TokenChars, both, "'")) } } .
 
 -compile({inline,yyaction_11/1}).
 -file("src/php_lang.xrl", 43).
@@ -809,4 +811,4 @@ yyaction_14(TokenChars, TokenLine) ->
 yyaction_15(TokenChars, TokenLine) ->
      { token, { arrow, TokenLine, list_to_atom (TokenChars) } } .
 
--file("/usr/local/Cellar/erlang/21.2/lib/erlang/lib/parsetools-2.1.8/include/leexinc.hrl", 313).
+-file("/home/nboisvert/.asdf/installs/erlang/21.3.8/lib/parsetools-2.1.8/include/leexinc.hrl", 313).
