@@ -4,6 +4,10 @@ defmodule Tuple.ParseTest do
 
   @source Mock.tuple_source
 
+  test "parses trailing comma" do
+    assert PhpAssocMap.to_tuple(Mock.trailing_comma_source) == @source
+  end
+
   test "parse unflatten array" do
     assert PhpAssocMap.to_tuple(Mock.spaced_source) == @source
   end

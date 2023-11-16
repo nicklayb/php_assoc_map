@@ -4,6 +4,10 @@ defmodule Map.ParseTest do
 
   @source Mock.map_source
 
+  test "parses trailing comma" do
+    assert PhpAssocMap.to_map(Mock.trailing_comma_source) == @source
+  end
+
   test "parse unflatten array" do
     assert PhpAssocMap.to_map(Mock.spaced_source) == @source
   end
