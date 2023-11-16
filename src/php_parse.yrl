@@ -16,6 +16,7 @@ array -> open_array associations close_array : '$2'.
 array -> open_array close_array : [].
 
 associations -> association comma associations : ['$1' | '$3'].
+associations -> association comma : ['$1'].
 associations -> association : ['$1'].
 
 association -> item arrow item : {'$1', '$3'}.

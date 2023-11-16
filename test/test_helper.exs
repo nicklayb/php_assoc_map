@@ -1,6 +1,10 @@
 ExUnit.start()
 
 defmodule Mock do
+  def trailing_comma_source do
+    "[\n\t'lvl_1_1'=>[\n\t\t'lvl_2_1'=>1,\n\t\t'lvl_2_2'=>'Single, [quoted\\'] string',\n\t\t'lvl_2_3'=>'Double quote string àéê'\n\t\t],\n\t'lvl_1_2'=>false,\n\t'lvl_1_3'=>[\n\t\t'lvl_2_1'=>true,\n\t\t'lvl_2_2'=>54.12\n\t\t],\n\t]"
+  end
+
   def tabbed_source do
     "[\n\t'lvl_1_1'=>[\n\t\t'lvl_2_1'=>1,\n\t\t'lvl_2_2'=>'Single, [quoted\\'] string',\n\t\t'lvl_2_3'=>'Double quote string àéê'\n\t\t],\n\t'lvl_1_2'=>false,\n\t'lvl_1_3'=>[\n\t\t'lvl_2_1'=>true,\n\t\t'lvl_2_2'=>54.12\n\t\t]\n\t]"
   end
