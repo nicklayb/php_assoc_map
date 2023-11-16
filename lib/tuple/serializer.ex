@@ -1,5 +1,5 @@
 defmodule PhpAssocMap.Tuple.Serializer do
-  alias PhpAssocMap.{Utils}
+  alias PhpAssocMap.Utils
 
   def from_tuple(tuple), do: Utils.wrap(Enum.join(from_tuple(tuple, []), ","), "[", "]")
   def from_tuple(tuple, list) when length(list) == length(tuple), do: list
