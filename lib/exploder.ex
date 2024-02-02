@@ -1,6 +1,11 @@
 defmodule PhpAssocMap.Exploder do
+  alias PhpAssocMap.Utils
   @break_line "\n"
 
+  @type input :: [tuple()] | map()
+  @type spacing :: :tabs | {:spaces, non_neg_integer()}
+
+  @default_spacing {:spaces, 2}
   @doc """
     Indents the whole associative array using either tabs or spaces. Defaults to 2 spaces.
 
@@ -17,10 +22,35 @@ defmodule PhpAssocMap.Exploder do
         iex> PhpAssocMap.Exploder.explode("['key'=>['next'=>'value']]", {:spaces, 1})
         "[\n 'key'=>[\n  'next'=>'value'\n  ]\n ]"
   """
-  @spec explode(binary()) :: binary()
-  def explode(assoc), do: explode(assoc, {:spaces, 2})
+  @spec explode(input(), spacing()) :: binary()
+  def explode(ast, spacing \\ @default_spacing) do
+    splitter = build_splitter(spacing)
+    Enum.reduce(ast, {[], 1}, fn {key, value}, {acc, level} ->
+      row = explode(key, value, level, splitter)
+      
+    end)
+  end
+
+  defp explode(key, value, level, splitter) when is_binary(value) do
+    indentor = String.duplicate(level, splitter)
+    indentor <> associate(key, value)
+  end
+
+  defp explode(key, value, level, splitter) when is_map(value) or is_list(value) do
+  end
 
   @splitter "\s"
+  defp build_splitter({:spaces, count}), do: String.duplicate(@splitter, count)
+
+  @splitter "\t"
+  defp build_splitter(:tabs), do: @splitter
+
+  defp associate(key, value) do
+    key
+    |> Utils.wrap("'")
+    |> PhpAssocMap.Utils.associate(value)
+  end
+
   def explode(assoc, {:spaces, count}) do
     splitter = String.duplicate(@splitter, count)
     explode_with(assoc, splitter)

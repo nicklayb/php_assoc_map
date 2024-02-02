@@ -1,4 +1,5 @@
 defmodule PhpAssocMap.Utils do
+  @type raw_value :: binary() | boolean() | integer() | float() | nil
   @doc """
     Converts a key and a value into an associative array association using arrow
 
@@ -8,8 +9,8 @@ defmodule PhpAssocMap.Utils do
         "'my_key'=>'Some value'"
   """
   @key_value_splitter "=>"
-  @spec associate(binary(), binary()) :: binary()
-  def associate(key, value), do: "'#{key}'#{@key_value_splitter}#{value}"
+  @spec associate(raw_value(), raw_value()) :: binary()
+  def associate(key, value), do: stringify(key) <> @key_value_splitter <> stringify(value)
 
   @doc """
     Convert a string for a literal string by escaping quotes and wrapping into them
@@ -18,13 +19,30 @@ defmodule PhpAssocMap.Utils do
 
         iex> PhpAssocMap.Utils.stringify("Jon's")
         "'Jon\\\\'s'"
+
+        iex> PhpAssocMap.Utils.stringify(true)
+        "true"
+
+        iex> PhpAssocMap.Utils.stringify(24)
+        "24"
+
+        iex> PhpAssocMap.Utils.stringify(24.10)
+        "24.10"
+
+        iex> PhpAssocMap.Utils.stringify(nil)
+        "null"
   """
-  @spec stringify(binary()) :: binary()
-  def stringify(string) do
+  @spec stringify(raw_value()) :: binary()
+  def stringify(string) when is_binary(string) do
     string
     |> String.replace("'", "\\'")
     |> wrap("'")
   end
+
+  @php_null "null"
+  def stringify(nil), do: @php_null
+
+  def stringify(other), do: to_string(other)
 
   @doc """
     Wraps a value inside specified string.
@@ -41,7 +59,8 @@ defmodule PhpAssocMap.Utils do
         "{house}"
   """
   @spec wrap(binary(), binary()) :: binary()
-  @spec wrap(binary(), binary(), binary()) :: binary()
   def wrap(string, left), do: wrap(string, left, left)
+
+  @spec wrap(binary(), binary(), binary()) :: binary()
   def wrap(string, left, right), do: left <> string <> right
 end

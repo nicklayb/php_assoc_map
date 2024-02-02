@@ -23,4 +23,4 @@ association -> item arrow item : {'$1', '$3'}.
 
 Erlang code.
 unwrap({_, _, V}) -> V.
-unquote(V) -> re:replace(unwrap(V), "\\\\", "", [{return,binary}]).
+unquote(V) -> re:replace(unwrap(V), "\\\\", "", [{return,binary},global]).
