@@ -15,6 +15,7 @@ defmodule UtilsTest do
 
   test "stringify expression" do
     assert Utils.stringify("Jon's") == "'Jon\\'s'"
+    assert Utils.stringify("L'utilisation de l'application") == "'L\\'utilisation de l\\'application'"
   end
 
   test "associate key and value" do
