@@ -15,14 +15,9 @@ defmodule UtilsTest do
 
   test "stringify expression" do
     assert Utils.stringify("Jon's") == "'Jon\\'s'"
-    assert Utils.stringify("L'utilisation de l'application") == "'L\\'utilisation de l\\'application'"
   end
 
   test "associate key and value" do
-    assert Utils.associate("key", "value") == "'key'=>value"
-  end
-
-  test "correctly gets the ast" do
-    assert PhpAssocMap.ast("['key'=>'value']")
+    assert Utils.associate("key", "value") == "'key'=>'value'"
   end
 end

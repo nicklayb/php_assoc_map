@@ -1,10 +1,12 @@
 defmodule PhpAssocMap.MixProject do
   use Mix.Project
 
+  @version "3.0.0"
+
   def project do
     [
       app: :php_assoc_map,
-      version: "2.0.1",
+      version: @version,
       name: "PhpAssocMap",
       description: "Library that parses PHP's associative array into Elixir's map.",
       source_url: "https://github.com/nicklayb/php_assoc_map",
