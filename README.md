@@ -21,7 +21,7 @@ Add the following to your `mix.exs` file:
 defp deps do
   [
     # ...
-    {:php_assoc_map, "~> 1.0"}
+    {:php_assoc_map, "~> 3.0"}
   ]
 end
 ```
@@ -51,7 +51,7 @@ source = """
 ]
 """
 
-PhpAssocMap.to_map source
+PhpAssocMap.to_map(source)
 
 # Outputs
 %{
@@ -80,19 +80,18 @@ source = """
 ]
 """
 
-PhpAssocMap.to_tuple source
+PhpAssocMap.to_tuple(source)
 
 # Outputs
 [
   {"lvl_1_1", [
       {"lvl_2_1", 1},
       {"lvl_2_2", "Single quoted string"},
-      {"lvl_2_3", "A string, with "commas" and stuff"}
+      {"lvl_2_3", "A string, with \"commas\" and stuff"}
     ]
   },
   {"lvl_1_2", false}
 }
-
 ```
 
 ### Serializing
@@ -100,60 +99,52 @@ PhpAssocMap.to_tuple source
 #### From map
 
 If you would like to get a serialized version of a map, the function `from_map/1` will do it.
+
 ```elixir
 source = %{
-  "lvl_1_1": %{
-    "lvl_2_1": 1,
-    "lvl_2_2": "Single quoted string",
-    "lvl_2_3": "A string, with "commas" and stuff"
+  "lvl_1_1" => %{
+    "lvl_2_1" => 1,
+    "lvl_2_2" => "Single quoted string",
+    "lvl_2_3" => "A string, with \"commas\" and stuff"
   },
-  "lvl_1_2": false
+  "lvl_1_2" => false
 }
 
-PhpAssocMap.from_map source
-
-# Outputs
-
-"""
-['lvl_1_1'=>['lvl_2_1'=>1,'lvl_2_2'=>'Single quoted string','lvl_2_3'=>'A string, with "commas" and stuff'],'lvl_1_2'=>false]
-"""
-
+PhpAssocMap.from_map(source)
 ```
 
 #### From tuple
 
 If you would like to retrieve a list o tuple instead of mapof you array, the function `to_tuple/1` will be your friend.
+
 ```elixir
 source = [
   {"lvl_1_1", [
       {"lvl_2_1", 1},
       {"lvl_2_2", "Single quoted string"},
-      {"lvl_2_3", "A string, with "commas" and stuff"}
+      {"lvl_2_3", "A string, with \"commas\" and stuff"}
     ]
   },
   {"lvl_1_2", false}
 }
 
-PhpAssocMap.from_tuple source
-
-# Outputs
-
-"""
-['lvl_1_1'=>['lvl_2_1'=>1,'lvl_2_2'=>'Single quoted string','lvl_2_3'=>'A string, with "commas" and stuff'],'lvl_1_2'=>false]
-"""
+PhpAssocMap.from_tuple(source)
 
 ```
 
-#### Exploding the result
+# Outputs
+
+#### Formatting the result
 
 If you would like to print the serialized array to a PHP file, you might want to have indented. For this purpose, you can use the `explode/2` function from the `PhpAssocMap.Utils` module.
 
 ```elixir
-source = """
+string_source = """
 ['lvl_1_1'=>['lvl_2_1'=>1,'lvl_2_2'=>'Single quoted string','lvl_2_3'=>'A string, with "commas" and stuff'],'lvl_1_2'=>false]
 """
+source = PhpAssocMap.to_tuple(string_source)
 # You can replace de 2 below for the number of space to use
-PhpAssocMap.Exploder.explode(source, {:spaces, 2})
+PhpAssocMap.from_tuple(source, {:spaces, 2})
 
 """
 [
@@ -172,7 +163,7 @@ PhpAssocMap.Exploder.explode(source, {:spaces, 2})
 ##### Or with tabs instead
 
 ```elixir
-PhpAssocMap.Exploder.explode(source, {:tabs})
+PhpAssocMap.from_tuple(source, :tabs)
 
 """
 [
@@ -186,7 +177,22 @@ PhpAssocMap.Exploder.explode(source, {:tabs})
 """
 ```
 
-*The function `explode/1` calls back `explode/2` with `{:spaces, 2}` as second parameter*
+##### Or no indentation/breakline
+
+```elixir
+PhpAssocMap.from_tuple(source, :none)
+
+"""
+[
+\t'lvl_1_1' => [
+\t\t'lvl_2_1' => 1,
+\t\t'lvl_2_2' => 'Single quoted string',
+\t\t'lvl_2_3' => 'A string, with "commas" and stuff'
+\t\t],
+\t'lvl_1_2' => false
+\t]
+"""
+```
 
 ## Limitations
 

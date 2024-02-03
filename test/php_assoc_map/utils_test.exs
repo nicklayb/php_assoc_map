@@ -18,10 +18,6 @@ defmodule UtilsTest do
   end
 
   test "associate key and value" do
-    assert Utils.associate("key", "value") == "'key'=>value"
-  end
-
-  test "correctly gets the ast" do
-    assert PhpAssocMap.ast("['key'=>'value']")
+    assert Utils.associate("key", "value") == "'key'=>'value'"
   end
 end
