@@ -200,3 +200,4 @@ PhpAssocMap.from_tuple(source, :none)
 
 Currently, the library only supports named keys, which means that straight are not parsed a the moment.
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/D1D2YX9OU)
